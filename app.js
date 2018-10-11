@@ -8,13 +8,13 @@ const eventsInfo = events.events.filter(item => item.type == 'info')
 const eventsCritical = events.events.filter(item => item.type == 'critical')
 
 
-const serverStart = Date.now()
+const serverStartTime = Date.now()
 
 
 app.use(function(req, res, next) {
     let requestTime = Date.now()
 
-    let currentTime = (requestTime - serverStart) / 1000
+    let currentTime = (requestTime - serverStartTime) / 1000
 
     let seconds = parseInt(currentTime % 60)
     seconds = seconds < 10  
