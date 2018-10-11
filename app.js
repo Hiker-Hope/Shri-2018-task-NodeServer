@@ -52,13 +52,7 @@
     app.use(function(req, res, next) {
         if (req.url == '/api/events?type=info') {
             res.send(eventsInfo)
-        } else {
-            next()
-        }
-    })
-
-    app.use(function(req, res, next) {
-        if (req.url == '/api/events?type=critical') {
+        } else  if (req.url == '/api/events?type=critical') {
             res.send(eventsCritical)
         } else {
             next()
