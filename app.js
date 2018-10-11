@@ -3,6 +3,8 @@ const app = express()
 const port = 8000
 const events = require('./events.json')
 
+// filter events for readability
+
 const eventsAll = events.events.map(item => item)
 const eventsInfo = events.events.filter(item => item.type == 'info')
 const eventsCritical = events.events.filter(item => item.type == 'critical')
