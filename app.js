@@ -21,7 +21,7 @@
         let currentTime = (requestTime - serverStartTime) / 1000
         let seconds = parseInt(currentTime % 60)
         let minutes = parseInt(currentTime / 60 % 60)
-        let hours = parseInt(currentTime / 60 / 60 % 24) 
+        let hours = parseInt(currentTime / 3600 % 24) 
         let currentTimeFormatted = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
 
         if (req.url == '/status') {
