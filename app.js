@@ -19,9 +19,7 @@ app.use(function(req, res, next) {
     let seconds = parseInt(currentTime % 60)
     let minutes = parseInt((currentTime / 60) % 60)
     let hours = parseInt((currentTime / 3600) % 24)
-    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(
-        minutes
-    )}:${formatTime(seconds)}`
+    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
 
     if (req.url == '/status') {
         res.send(`${currentTimeFormatted}`)
