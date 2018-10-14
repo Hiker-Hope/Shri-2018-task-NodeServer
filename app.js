@@ -3,10 +3,6 @@ const app = express()
 const port = 8000
 const events = require('./events.json')
 
-// filter events for readability
-
-const eventsInfo = events.events.filter(item => item.type == 'info')
-const eventsCritical = events.events.filter(item => item.type == 'critical')
 const serverStartTime = Date.now()
 
 function formatTime(number) {
@@ -32,7 +28,7 @@ app.use(function(req, res, next) {
 
 // Массив с корректными типами событий для запроса
 
-const VALID_EVENT_TYPES = ['critical', 'info']
+const valid_events_types = ['critical', 'info']
 
 //  По типу переданному в запросе выдаем либо все, либо отфильтрованные события
 
@@ -44,13 +40,13 @@ const sendEvents = (res, type) => {
     }
     const types = type.split(':')
 
-    if (types.some(e => VALID_EVENT_TYPES.indexOf(e) == -1)) {
+    if (types.some(item => valid_events_types.indexOf(item) == -1)) {
         res.status(400).send('Incorrect type')
     } else {
-        input.events = input.events.filter(
+        filteredEvents = input.events.filter(
             event => types.indexOf(event.type) != -1
         )
-        res.send(input)
+        res.send(filteredEvents)
     }
 }
 
