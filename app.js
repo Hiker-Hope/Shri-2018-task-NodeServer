@@ -30,9 +30,9 @@ app.use(function(req, res, next) {
 
 const valid_events_types = ['critical', 'info']
 
-//  По типу переданному в запросе выдаем либо все, либо отфильтрованные события
+//  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
 
-const sendEvents = (res, type) => {
+function sendEvents(res, type) {
     const input = events
     if (!type) {
         res.send(input)
