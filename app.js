@@ -19,7 +19,9 @@ app.use(function(req, res, next) {
     let seconds = parseInt(currentTime % 60)
     let minutes = parseInt((currentTime / 60) % 60)
     let hours = parseInt((currentTime / 3600) % 24)
-    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
+    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(
+        minutes
+    )}:${formatTime(seconds)}`
 
     if (req.url == '/status') {
         res.send(`${currentTimeFormatted}`)
@@ -28,23 +30,38 @@ app.use(function(req, res, next) {
     }
 })
 
-// Костыли на случай запроса обоих типов событий одновременно т__т
-// нужно разобраться с условиями в передаваемых параметрах для роутов
+// Массив с корректными типами событий для запроса
 
-app.use(function(req, res, next) {
-    if (
-        req.url == '/api/events' ||
-        req.url == '/api/events?type=critical:info' ||
-        req.url == '/api/events?type=info:critical'
-    ) {
-        res.send(events.events)
-    } else if (req.url == `/api/events?type=info`) {
-        res.send(eventsInfo)
-    } else if (req.url == '/api/events?type=critical') {
-        res.send(eventsCritical)
-    } else {
-        next()
+const VALID_EVENT_TYPES = ['critical', 'info']
+
+//  По типу переданному в запросе выдаем либо все, либо отфильтрованные события
+
+const sendEvents = (res, type) => {
+    const input = events
+    if (!type) {
+        res.send(input)
+        return
     }
+    const types = type.split(':')
+
+    if (types.some(e => VALID_EVENT_TYPES.indexOf(e) == -1)) {
+        res.status(400).send('Incorrect type')
+    } else {
+        input.events = input.events.filter(
+            event => types.indexOf(event.type) != -1
+        )
+        res.send(input)
+    }
+}
+
+app.get('/api/events', (req, res) => {
+    const type = req.query.type
+    sendEvents(res, type)
+})
+
+app.post('/api/events', (req, res) => {
+    const type = req.body.type
+    sendEvents(res, type)
 })
 
 app.use(function(req, res) {
