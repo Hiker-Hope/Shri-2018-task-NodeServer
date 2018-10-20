@@ -3,64 +3,61 @@ const app = express()
 const port = 8000
 const events = require('./events.json')
 
-const eventsAll = events.events.map(item => item)
-const eventsInfo = events.events.filter(item => item.type == 'info')
-const eventsCritical = events.events.filter(item => item.type == 'critical')
-
-
 const serverStartTime = Date.now()
 
+function formatTime(number) {
+    return (number = number < 10 ? `0${number}` : `${number}`)
+}
 
 app.use(function(req, res, next) {
     let requestTime = Date.now()
-
     let currentTime = (requestTime - serverStartTime) / 1000
-
     let seconds = parseInt(currentTime % 60)
-    seconds = seconds < 10  
-            ? `0${seconds}`
-            : `${seconds}`
-    let minutes = parseInt(currentTime / 60 % 60)
-    minutes = minutes < 10 
-            ? `0${minutes}`
-            : `${minutes}`
-    let hours = parseInt(currentTime / 60 / 60 % 24) 
-    hours = hours < 10 
-            ? `0${hours}`
-            : `${hours}`
-
-    let currentTimeFormatted = `${hours}:${minutes}:${seconds}`
+    let minutes = parseInt((currentTime / 60) % 60)
+    let hours = parseInt((currentTime / 3600) % 24)
+    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(
+        minutes
+    )}:${formatTime(seconds)}`
 
     if (req.url == '/status') {
-
         res.send(`${currentTimeFormatted}`)
     } else {
         next()
     }
 })
 
-app.use(function(req, res, next) {
-    if (req.url == '/api/events') {
-        res.send(eventsAll)
-    } else {
-        next()
+// Массив с корректными типами событий для запроса
+
+const valid_events_types = ['critical', 'info']
+
+//  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
+
+function sendEvents(res, type) {
+    const input = events
+    if (!type) {
+        res.send(input)
+        return
     }
+    const types = type.split(':')
+
+    if (types.some(item => valid_events_types.indexOf(item) == -1)) {
+        res.status(400).send('Incorrect type')
+    } else {
+        filteredEvents = input.events.filter(
+            event => types.indexOf(event.type) != -1
+        )
+        res.send(filteredEvents)
+    }
+}
+
+app.get('/api/events', (req, res) => {
+    const type = req.query.type
+    sendEvents(res, type)
 })
 
-app.use(function(req, res, next) {
-    if (req.url == '/api/events?type=info') {
-        res.send(eventsInfo)
-    } else {
-        next()
-    }
-})
-
-app.use(function(req, res, next) {
-    if (req.url == '/api/events?type=critical') {
-        res.send(eventsCritical)
-    } else {
-        next()
-    }
+app.post('/api/events', (req, res) => {
+    const type = req.body.type
+    sendEvents(res, type)
 })
 
 app.use(function(req, res) {
