@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "start": "nodemon bundle.js"
+    "start": "ts-node app.ts"
   },
   "author": "Hope_R",
   "license": "ISC",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
     "typescript": "^3.1.3"
   }
 }

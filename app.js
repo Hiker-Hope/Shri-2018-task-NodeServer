@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var app = express();
 var port = 8000;
@@ -25,9 +26,9 @@ app.use(function (req, res, next) {
 var valid_events_types = ['critical', 'info'];
 //  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
 function sendEvents(res, type) {
-    var input = events;
+    // const input : Event[] = events
     if (!type) {
-        res.send(input);
+        res.send(events);
         return;
     }
     var types = type.split(':');
@@ -35,7 +36,7 @@ function sendEvents(res, type) {
         res.status(400).send('Incorrect type');
     }
     else {
-        var filteredEvents = input.events.filter(function (event) { return types.indexOf(event.type) != -1; });
+        var filteredEvents = events.events.filter(function (event) { return types.indexOf(event.type) != -1; });
         res.send(filteredEvents);
     }
 }
