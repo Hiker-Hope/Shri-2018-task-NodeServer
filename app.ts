@@ -41,7 +41,6 @@ let valid_events_types: string[] = ['critical', 'info']
 //  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
 
 function sendEvents(res: Response, type: string): void {
-    // const input : Event[] = events
     if (!type) {
         res.send(events)
         return
