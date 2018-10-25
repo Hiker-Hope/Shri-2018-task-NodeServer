@@ -2,10 +2,10 @@ const express = require('express')
 import { Request, Response, NextFunction } from 'express'
 const app = express()
 const port = 8000
-interface EventItem {
+export interface EventItem {
     type: string
 }
-interface Events {
+export interface Events {
     events: EventItem[]
 }
 
@@ -36,11 +36,14 @@ app.use(function(req: Request, res: Response, next: NextFunction) {
 
 // Массив с корректными типами событий для запроса
 
-let valid_events_types: string[] = ['critical', 'info']
+const valid_events_types: string[] = ['critical', 'info']
 
 //  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
 
-function sendEvents(res: Response, type: string): void {
+function sendEvents(
+    res: Response,
+    type: typeof events.events[0]['type']
+): void {
     if (!type) {
         res.send(events)
         return

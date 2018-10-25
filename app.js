@@ -26,7 +26,6 @@ app.use(function (req, res, next) {
 var valid_events_types = ['critical', 'info'];
 //  По типу, переданному в запросе, выдаем либо все, либо отфильтрованные события
 function sendEvents(res, type) {
-    // const input : Event[] = events
     if (!type) {
         res.send(events);
         return;
