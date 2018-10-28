@@ -18,12 +18,12 @@ function formatTime(number: number | string): string {
 }
 
 app.use(function(req: Request, res: Response, next: NextFunction) {
-    const requestTime: number = Date.now()
-    let currentTime: number = (requestTime - serverStartTime) / 1000
-    let seconds: number = parseInt((currentTime % 60).toString())
-    let minutes: number = parseInt(((currentTime / 60) % 60).toString())
-    let hours: number = parseInt(((currentTime / 3600) % 24).toString())
-    let currentTimeFormatted: string = `${formatTime(hours)}:${formatTime(
+    const requestTime = Date.now()
+    let currentTime = (requestTime - serverStartTime) / 1000
+    let seconds = parseInt((currentTime % 60).toString())
+    let minutes = parseInt(((currentTime / 60) % 60).toString())
+    let hours = parseInt(((currentTime / 3600) % 24).toString())
+    let currentTimeFormatted = `${formatTime(hours)}:${formatTime(
         minutes
     )}:${formatTime(seconds)}`
 
