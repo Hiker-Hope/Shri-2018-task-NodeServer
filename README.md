@@ -6,7 +6,7 @@
 
 -   склонировать репозиторий: git clone https://github.com/Hiker-Hope/Shri-2018-task-NodeServer.git
 -   npm i
--   node app.js
+-   npm start
 -   открыть в браузере:
 
 1. localhost:8000/api/events - для просмотра всех событий
